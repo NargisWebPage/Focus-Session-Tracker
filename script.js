@@ -16,6 +16,7 @@ const progressFill = document.querySelector(".progress-fill");
 const dailyGoalDisplay = document.querySelector(".progress h2");
 const editGoalBtn = document.getElementById("editGoal");
 const sessionTable = document.querySelector(".session-history tbody");
+const timerCircle = document.querySelector(".timer-circle");
 
 // Local Storage Keys
 
