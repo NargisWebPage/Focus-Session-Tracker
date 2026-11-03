@@ -1,0 +1,47 @@
+declare const timerDisplay: HTMLParagraphElement;
+declare const startBtn: HTMLButtonElement;
+declare const pauseBtn: HTMLButtonElement;
+declare const resetBtn: HTMLButtonElement;
+declare const lengthButtons: NodeListOf<HTMLButtonElement>;
+declare const darkMoodBtn: HTMLButtonElement;
+declare const progressText: HTMLParagraphElement;
+declare const progressPercent: HTMLParagraphElement;
+declare const progressFill: HTMLDivElement;
+declare const dailyGoalDisplay: HTMLHeadingElement;
+declare const editGoalBtn: HTMLButtonElement;
+declare const sessionTable: HTMLTableSectionElement;
+declare const timerCircle: HTMLDivElement;
+interface Session {
+    date: string;
+    duration: number;
+    time: string;
+}
+declare const SESSION_KEY = "focusSessions";
+declare const GOAL_KEY = "dailyGoal";
+declare const DURATION_KEY = "selectedDuration";
+declare const THEME_KEY = "darkMode";
+declare const savedDuration: number;
+declare let selectedDuration: number;
+declare let remainingTime: number;
+declare let timerInterval: number | undefined;
+declare let isRunning: boolean;
+declare const savedGoal: number;
+declare let dailyGoal: number;
+declare let completedMinutes: number;
+declare let sessions: Session[];
+declare const savedSessions: string | null;
+declare function saveSessions(): void;
+declare function getTodayDate(): string;
+declare function restoreProgress(): void;
+declare let audioContext: AudioContext | null;
+declare function enableAlarmAudio(): void;
+declare function updateTimerDisplay(): void;
+declare function startTimer(): void;
+declare function pauseTimer(): void;
+declare function resetTimer(): void;
+declare function playAlarm(): void;
+declare function completeSession(): void;
+declare function updateProgress(): void;
+declare function displaySessions(): void;
+declare const savedTheme: string | null;
+//# sourceMappingURL=script.d.ts.map

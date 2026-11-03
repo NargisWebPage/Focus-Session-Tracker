@@ -1,0 +1,963 @@
+/* ================================
+   Focus Session Tracker
+   Modern Purple + Lavender Theme
+   ================================ */
+
+:root {
+    color-scheme: light;
+    --page-bg: #f7f8ff;
+    --surface: rgba(255, 255, 255, 0.88);
+    --surface-soft: #f2f0ff;
+    --text: #17234a;
+    --muted: #7180a5;
+    --purple: #7657f6;
+    --purple-dark: #6242e8;
+    --purple-light: #a99aff;
+    --border: #e5e8fb;
+    --track: #eceef8;
+    --shadow: 0 14px 40px rgba(57, 54, 123, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 320px;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+        radial-gradient(
+            ellipse at 12% 0%,
+            rgba(199, 187, 255, 0.26),
+            transparent 34rem
+        ),
+        radial-gradient(
+            ellipse at 100% 18%,
+            rgba(208, 224, 255, 0.32),
+            transparent 30rem
+        ),
+        var(--page-bg);
+    line-height: 1.5;
+}
+
+/* Header */
+
+header {
+    min-height: 82px;
+    padding: 5px clamp(18px, 4vw, 56px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.76);
+    border-bottom: 1px solid rgba(225, 229, 250, 0.9);
+    backdrop-filter: blur(14px);
+    
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+header h3 {
+    margin: 0;
+    font-size: clamp(1.05rem, 2vw, 1.45rem);
+    font-weight: 750;
+    letter-spacing: -0.035em;
+}
+
+.dark-mood {
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    color: #5f6596;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition:
+        background 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.dark-mood:hover {
+    color: var(--purple-dark);
+    background: var(--surface-soft);
+    transform: rotate(-8deg);
+}
+
+button {
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible {
+    outline: 3px solid rgba(118, 87, 246, 0.38);
+    outline-offset: 3px;
+}
+
+/* Main Layout */
+header + main {
+  margin-top: 30px;
+}
+
+main {
+    width: min(1240px, 100%);
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.9fr);
+    align-items: stretch;
+    gap: 18px;
+    
+}
+
+.focus-timer,
+.todays-progress,
+.session-history {
+    min-width: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+}
+
+/* Focus Timer */
+
+.focus-timer {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    padding: 20px 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.focus-timer > h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+}
+
+.focus-timer > p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+}
+
+/* Circular Timer */
+
+.timer-circle {
+    --timer-progress: 25%;
+
+    width: clamp(192px, 20vw, 232px);
+    aspect-ratio: 1;
+    margin: 18px auto 16px;
+    padding: 18px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #fff 62%,
+            transparent 63%
+        ),
+        conic-gradient(
+            from -90deg,
+            var(--purple) 0 var(--timer-progress),
+            var(--track) var(--timer-progress) 100%
+        );
+
+    box-shadow: 0 12px 35px rgba(118, 87, 246, 0.11);
+}
+
+.timer-circle::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    z-index: -1;
+    border-radius: inherit;
+    background: #fff;
+}
+
+.p-timer-display,
+#timer-display {
+    margin: 0;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: -0.055em;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-label {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 1rem;
+    text-transform: lowercase;
+}
+
+/* Timer Buttons */
+
+.button-timer {
+    width: min(80%);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.button-timer button,
+.length-btn button {
+    min-height: 44px;
+    padding: 8px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid #e2ddff;
+    border-radius: 999px;
+    color: #66739c;
+    background: linear-gradient(145deg, #fff, #f7f5ff);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease,
+        color 180ms ease;
+}
+
+.button-timer button:hover,
+.length-btn button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(93, 69, 205, 0.12);
+    color: var(--purple-dark);
+}
+
+.button-timer #startBtn {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, #8d70ff, #6947ed);
+    box-shadow: 0 9px 20px rgba(118, 87, 246, 0.22);
+}
+
+.button-timer #startBtn:hover {
+    background: linear-gradient(135deg, #7e60fa, #5937df);
+    box-shadow: 0 12px 24px rgba(118, 87, 246, 0.3);
+}
+
+.button-timer i {
+    font-size: 0.95rem;
+}
+
+/* Session Length */
+
+.session-length {
+    width: min(100%, 580px);
+    margin-top: 20px;
+    text-align: left;
+}
+
+.session-length h3 {
+    margin: 0 0 9px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.length-btn {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.length-btn button {
+    min-height: 42px;
+    padding-inline: 10px;
+}
+
+.length-btn button[data-duration="25"] {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, #8d70ff, #6947ed);
+    box-shadow: 0 7px 17px rgba(118, 87, 246, 0.2);
+}
+
+/* Dashboard Layout */
+
+.study-dashboard {
+    min-width: 0;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.todays-progress {
+    overflow: hidden;
+}
+
+/* Today's Progress Heading */
+
+.goal {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    background: linear-gradient(120deg, #f4f1ff, #fbfaff);
+    border-bottom: 1px solid #f0effb;
+}
+
+.goal > p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    font-weight: 750;
+}
+
+.goal > p i {
+    color: var(--purple);
+    font-size: 1.4rem;
+}
+
+/* Edit Goal Button */
+
+.edit-goal {
+    flex: 0 0 auto;
+    padding: 9px 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--purple-dark);
+    background: #fff;
+    border: 1px solid #e2ddff;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition:
+        background 180ms ease,
+        transform 180ms ease;
+}
+
+.edit-goal:hover {
+    background: #f0ecff;
+    transform: translateY(-1px);
+}
+
+/* Progress Bar and Text */
+
+.progress {
+    padding: 15px 20px 18px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 12px;
+}
+
+.progress h4 {
+    grid-column: 1 / -1;
+    margin: 0 0 4px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 550;
+}
+
+.progress h2 {
+    grid-column: 1 / -1;
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.5vw, 2rem);
+    letter-spacing: -0.035em;
+}
+
+.progress-bg {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--track);
+}
+
+.progress-fill {
+    width: 63%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #8c6bff, #6847eb);
+    box-shadow: 0 0 14px rgba(118, 87, 246, 0.22);
+    transition: width 350ms ease;
+}
+
+#progressText,
+#progressPercent {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+#progressPercent {
+    color: var(--text);
+    font-weight: 750;
+    text-align: right;
+}
+
+/* Session History */
+
+.session-history {
+    padding: 17px 20px;
+    overflow: hidden;
+}
+
+.session-history h3 {
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    letter-spacing: -0.02em;
+}
+
+.session-history h3 i {
+    color: #7180b1;
+    font-size: 1.45rem;
+}
+
+.session-history table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.session-history thead {
+    color: var(--muted);
+}
+
+.session-history th {
+    padding: 0 8px 12px 0;
+    font-size: 0.8rem;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.session-history td {
+    padding: 9px 8px 9px 0;
+    border-top: 1px solid #edf0fa;
+    color: #63749d;
+    white-space: nowrap;
+}
+
+.session-history th:last-child,
+.session-history td:last-child {
+    width: 34px;
+    padding-right: 0;
+    text-align: right;
+}
+
+/* Delete Button */
+
+.session-history td button {
+    width: 32px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    color: #7180b1;
+    background: transparent;
+    border: 0;
+    border-radius: 9px;
+    cursor: pointer;
+    transition:
+        color 160ms ease,
+        background 160ms ease;
+}
+
+.session-history td button:hover {
+    color: #e05278;
+    background: #fff0f4;
+}
+
+/* Tablet Layout */
+
+@media (max-width: 1000px) {
+    main {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 18px;
+        padding: 22px;
+    }
+
+    .focus-timer {
+        padding: 28px 20px;
+    }
+
+    .study-dashboard {
+        gap: 18px;
+    }
+
+    .goal,
+    .progress,
+    .session-history {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .button-timer,
+    .length-btn {
+        gap: 8px;
+    }
+
+    .button-timer button {
+        padding-inline: 10px;
+        gap: 7px;
+    }
+
+    .session-history table {
+        font-size: 0.82rem;
+    }
+
+    .session-history td {
+        padding-top: 13px;
+        padding-bottom: 13px;
+    }
+}
+
+/* Phone Layout */
+
+@media (max-width: 700px) {
+    header {
+        min-height: 70px;
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    .logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    header h3 {
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
+    .dark-mood {
+        width: 40px;
+        height: 40px;
+        font-size: 1.15rem;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 16px 12px 28px;
+    }
+
+    .focus-timer {
+        padding: 28px 16px;
+        border-radius: 20px;
+    }
+
+    .focus-timer > h2 {
+        font-size: clamp(1.65rem, 7vw, 2.1rem);
+    }
+
+    .focus-timer > p {
+        max-width: 290px;
+        font-size: 0.95rem;
+    }
+
+    .timer-circle {
+        width: clamp(205px, 64vw, 260px);
+        margin: 28px auto 24px;
+    }
+
+    .p-timer-display,
+    #timer-display {
+        font-size: clamp(2.65rem, 12vw, 3.25rem);
+    }
+
+    .button-timer {
+        gap: 8px;
+    }
+
+    .button-timer button {
+        min-height: 48px;
+        padding: 10px 7px;
+        gap: 6px;
+        font-size: 0.86rem;
+    }
+
+    .button-timer button i {
+        font-size: 0.82rem;
+    }
+
+    .session-length {
+        margin-top: 28px;
+    }
+
+    .length-btn {
+        gap: 8px;
+    }
+
+    .length-btn button {
+        min-height: 46px;
+        font-size: 0.9rem;
+    }
+
+    .study-dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .goal {
+        padding: 18px 16px;
+        gap: 8px;
+    }
+
+    .goal > p {
+        gap: 9px;
+        font-size: 1rem;
+    }
+
+    .goal > p i {
+        font-size: 1.15rem;
+    }
+
+    .edit-goal {
+        padding: 8px 10px;
+        gap: 6px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+    }
+
+    .progress {
+        padding: 18px 16px 20px;
+    }
+
+    .progress h2 {
+        margin-bottom: 18px;
+        font-size: 1.65rem;
+    }
+
+    .progress-bg {
+        height: 11px;
+    }
+
+    #progressText,
+    #progressPercent {
+        font-size: 0.82rem;
+    }
+
+    .session-history {
+        padding: 20px 14px;
+        border-radius: 20px;
+    }
+
+    .session-history h3 {
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+    }
+
+    .session-history table {
+        font-size: 0.76rem;
+    }
+
+    .session-history th {
+        padding-right: 4px;
+        padding-bottom: 10px;
+        font-size: 0.72rem;
+    }
+
+    .session-history td {
+        padding: 13px 4px 13px 0;
+    }
+
+    .session-history th:last-child,
+    .session-history td:last-child {
+        width: 28px;
+    }
+
+    .session-history td button {
+        width: 27px;
+        height: 30px;
+    }
+}
+
+/* Very Narrow Phones */
+
+@media (max-width: 370px) {
+    header h3 {
+        font-size: 0.9rem;
+    }
+
+    .logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .focus-timer {
+        padding-inline: 12px;
+    }
+
+    .button-timer {
+        gap: 5px;
+    }
+
+    .button-timer button {
+        padding-inline: 4px;
+        font-size: 0.78rem;
+    }
+
+    .length-btn {
+        gap: 5px;
+    }
+
+    .length-btn button {
+        padding-inline: 4px;
+        font-size: 0.82rem;
+    }
+
+    .goal > p {
+        font-size: 0.92rem;
+    }
+
+    .edit-goal {
+        padding-inline: 8px;
+        font-size: 0.74rem;
+    }
+
+    .session-history {
+        padding-inline: 10px;
+    }
+
+    .session-history table {
+        font-size: 0.7rem;
+    }
+}
+
+/* Reduced Motion Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+
+
+/* ======================================
+   DARK MODE
+====================================== */
+
+body.dark-mode {
+    color-scheme: dark;
+
+    --page-bg: #171526;
+    --surface: #242238;
+    --surface-soft: #302b49;
+    --text: #f1efff;
+    --muted: #aaa5c5;
+    --border: #39344f;
+    --track: #39344f;
+    --timer-face: #242238;
+
+    --shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+
+    background:
+        radial-gradient(
+            ellipse at 12% 0%,
+            rgba(118, 87, 246, 0.14),
+            transparent 34rem
+        ),
+        radial-gradient(
+            ellipse at 100% 18%,
+            rgba(100, 85, 180, 0.12),
+            transparent 30rem
+        ),
+        var(--page-bg);
+}
+
+/* Header */
+
+body.dark-mode header {
+    background: rgba(36, 34, 56, 0.88);
+    border-bottom-color: var(--border);
+}
+
+body.dark-mode .dark-mood {
+    color: #d1c5ff;
+}
+
+body.dark-mode .dark-mood:hover {
+    background: var(--surface-soft);
+    color: #ffffff;
+}
+
+/* Main Cards */
+
+body.dark-mode .focus-timer,
+body.dark-mode .todays-progress,
+body.dark-mode .session-history {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+}
+
+/* Timer Circle */
+
+body.dark-mode .timer-circle {
+    background:
+        radial-gradient(
+            circle at center,
+            var(--timer-face) 62%,
+            transparent 63%
+        ),
+        conic-gradient(
+            from -90deg,
+            var(--purple) 0 var(--timer-progress),
+            var(--track) var(--timer-progress) 100%
+        );
+}
+
+body.dark-mode .timer-circle::before {
+    background: var(--timer-face);
+}
+
+body.dark-mode .timer-label {
+    color: var(--muted);
+}
+
+/* Timer Buttons */
+
+body.dark-mode .button-timer button,
+body.dark-mode .length-btn button {
+    color: #d6d0f3;
+    background: #302c45;
+    border-color: #494064;
+}
+
+body.dark-mode .button-timer button:hover,
+body.dark-mode .length-btn button:hover {
+    color: #ffffff;
+    background: #3b3458;
+}
+
+
+/* Custom Duration Button */
+
+.length-btn #customDurationBtn {
+    grid-column: 1 / -1;
+    border: 1px dashed var(--purple-light);
+    color: var(--purple-dark);
+}
+
+body.dark-mode .length-btn #customDurationBtn {
+    color: #d6caff;
+    border-color: var(--purple-light);
+    background: #302c45;
+}
+/* Keep Start Button Purple */
+
+body.dark-mode .button-timer #startBtn,
+body.dark-mode .length-btn button[data-duration="25"] {
+    color: #ffffff;
+    background: linear-gradient(135deg, #8d70ff, #6947ed);
+    border-color: transparent;
+}
+
+/* Today's Progress Heading */
+
+body.dark-mode .goal {
+    background: linear-gradient(120deg, #302b49, #29263e);
+    border-bottom-color: var(--border);
+}
+
+body.dark-mode .goal > p i {
+    color: #aa96ff;
+}
+
+/* Edit Goal Button */
+
+body.dark-mode .edit-goal {
+    color: #c9baff;
+    background: #383250;
+    border-color: #51476e;
+}
+
+body.dark-mode .edit-goal:hover {
+    background: #453b65;
+}
+
+/* Progress */
+
+body.dark-mode .progress h4 {
+    color: var(--muted);
+}
+
+body.dark-mode #progressText,
+body.dark-mode #progressPercent {
+    color: var(--muted);
+}
+
+body.dark-mode #progressPercent {
+    color: var(--text);
+}
+
+/* Session History */
+
+body.dark-mode .session-history h3 i {
+    color: #a99aff;
+}
+
+body.dark-mode .session-history thead {
+    color: var(--muted);
+}
+
+body.dark-mode .session-history td {
+    color: #c2bddb;
+    border-top-color: var(--border);
+}
+
+/* Delete Button */
+
+body.dark-mode .session-history td button {
+    color: #aaa5c5;
+}
+
+body.dark-mode .session-history td button:hover {
+    color: #ff789b;
+    background: rgba(224, 82, 120, 0.13);
+}

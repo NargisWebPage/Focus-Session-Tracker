@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCUS SESSION TRACKER</title>
+    
+<link
+  rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img class="logo"  src="img/logo.png" alt="foucs session tracker logo">
+          <h3>Focus Session Tracker</h3>
+        <button id="darkMood" class="dark-mood">  <i class="fa-solid fa-moon"></i></button>
+    </header>
+    <main>
+<!--focus timer section  -->  
+    <section class="focus-timer">
+       <h2>Time to Focus!</h2>
+       <p>Small steps make big progress.</p>
+       <div class="timer-circle">
+        <p id="timer-display" class="p-timer-display">25:00</p>
+        <span class="timer-label"> minutes</span>
+       </div>
+<!--timer buttons -->
+       <div class="button-timer" id="timerButtons">
+            <button id="startBtn"><i class="fa-solid fa-play"></i>Start</button>
+            <button id="pauseBtn"><i class="fa-solid fa-pause"></i>Pause</button>
+            <button id="resetBtn"> <i class="fa-solid fa-rotate-left"></i>Reset</button>
+       </div>
+<!--length buttons -->
+       <div class="session-length">
+           <h3>Session Length</h3>
+           <div class="length-btn"   id="lengthButtons">
+               <button data-duration="15">15 min</button>
+               <button data-duration="25">25 min</button>
+               <button data-duration="50">50 min</button>
+               <button id="customDurationBtn">Custom</button>
+
+           </div>
+       </div>  
+    </section>
+
+
+<!-- section Today's progress and Session History -->
+ <section class="study-dashboard">
+    <div class="todays-progress">
+       <div class="goal">
+           <p><i class="fa-solid fa-chart-line"></i>Today's Progress</p>
+           <button id="editGoal" class="edit-goal"><i class="fa-solid fa-pen"></i>Edit Goal</button>
+       </div>
+
+<!-- Today's progress section progress bar  -->
+       <div class="progress" id="progressBar">
+          <h4>Daily Goal</h4>
+          <h2>2 hours</h2>
+          <div class="progress-bg">
+            <div class="progress-fill"></div>
+          </div>
+          <p id="progressText">1 hr 15 min completed</p>
+          <p id="progressPercent">63%</p>
+        </div>
+    </div>
+
+<!-- session history section -->
+    <div class="session-history">
+       <h3><i class="fa-regular fa-clock"></i>Session History</h3>
+
+       <table>
+          <thead>
+             <tr>
+                 <th>Date</th>
+                 <th>Duration</th>
+                 <th>Time</th>
+             </tr>
+          </thead>
+          <tbody>
+             <tr>
+                <td>Oct 21, 2025</td>
+                <td>25 min</td>
+                <td>10:50 AM</td>
+                <td><button><i class="fa-solid fa-trash-can"></i></button></td>
+             </tr>
+
+              <tr>
+                <td>Oct 22, 2025</td>
+                <td>25 min</td>
+                <td>10:00 AM</td>
+                <td><button><i class="fa-solid fa-trash-can"></i></button></td>
+             </tr>
+
+              <tr>
+                <td>Oct 23, 2025</td>
+                <td>25 min</td>
+                <td>10:15 AM</td>
+                <td><button><i class="fa-solid fa-trash-can"></i></button></td>
+             </tr>
+
+              <tr>
+                <td>Oct 24, 2025</td>
+                <td>50 min</td>
+                <td>9:15 AM</td>
+                <td><button><i class="fa-solid fa-trash-can"></i></button></td>
+             </tr>
+         </tbody>
+       </table>
+    </div>
+ </section>
+    </main>
+<script src="./script.js"></script>
+</body>
+</html>
